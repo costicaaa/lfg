@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Sudoku Vue</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div id="app" class="container">
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="selectedPair">Pair</label>
+            <select id="selectedPair" v-model="selectedPair" class="form-control">
+                <option value="0" >-- Select a pair -- </option>
+                <option v-for="(pair, index) in pairs" :value="index">j = {{pair.j}} ; k = {{ pair.k }} </option>
+            </select>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="modulus">Mod</label>
+                <input class="form-control" type="text" id="modulus" v-model.number="modulus">
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="seed">Seed</label>
+                <input class="form-control" type="text" id="seed" v-model="seed">
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="numberOfNumbers">Number of numbers</label>
+                <input class="form-control" type="text" id="numberOfNumbers" v-model.number="numberOfNumbers">
+            </div>
+        </div>
+    </div>
+
+
+    <br>
+    <br>
+    <br>
+    <button class="btn btn-success" @click="generateNumbers">Generate numbers</button>
+
+    <p>{{ numbers }}</p>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            numberOfNumbers: 20,
+            selectedPair: 1,
+            seed: "6421893",
+            modulus: 10,
+            pairs: {
+                1: {
+                    j: 3,
+                    k: 7
+                },
+                2: {
+                    j: 7,
+                    k: 10,
+                },
+                3: {
+                    j: 24,
+                    k: 55,
+                },
+                4: {
+                    j: 65,
+                    k: 71,
+                },
+                5: {
+                    j: 6,
+                    k: 31,
+                },
+                6: {
+                    j: 24,
+                    k: 55,
+                }
+            },
+            numbers: [],
+        },
+        methods: {
+            generateNumbers(){
+                this.numbers = [];
+                let j = this.pairs[this.selectedPair].j;
+                let k = this.pairs[this.selectedPair].k;
+                // let k = 7;
+                let seed = this.seed;
+                let modulus = this.modulus;
+
+
+                if(this.seed.length < k)
+                {
+                    alert("no puede, seed must be longer than K ");
+                    return;
+                }
+
+
+                for(let iterator = 0; iterator < this.numberOfNumbers; iterator ++)
+                {
+                    let jVal = parseInt(seed[j-1]);
+                    let kVal = parseInt(seed[k-1]);
+                    let out = (jVal + kVal) % modulus;
+
+                    let temp = seed.substr(1, seed.length);
+
+                    temp = temp.toString();
+                    temp += out;
+                    seed = temp;
+
+                    this.numbers.push(out);
+                }
+            }
+
+
+        },
+
+        mounted() {
+
+        },
+    })
+</script>
+
+</body>
+</html>
